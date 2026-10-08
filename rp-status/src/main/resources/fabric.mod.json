@@ -1,0 +1,23 @@
+{
+	"schemaVersion": 1,
+	"id": "rpstatus",
+	"version": "${version}",
+	"name": "RP Status",
+	"description": "Lets players pick roleplay statuses from a /status menu and shows them as colored squares in the TAB player list.",
+	"authors": [
+		"Made with Claude"
+	],
+	"license": "MIT",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"rpstatus.RpStatusMod"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.18.4",
+		"minecraft": "~26.2",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
