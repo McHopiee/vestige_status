@@ -54,6 +54,15 @@ public final class StatusStore {
 		put(player, next);
 	}
 
+	/** Replaces all of a player's statuses at once (used by the Save button). */
+	public static void set(UUID player, Set<Status> statuses) {
+		EnumSet<Status> next = copy(statuses);
+		// Never allow both halves of a pair, just in case
+		if (next.contains(Status.IN_CHARACTER)) next.remove(Status.OUT_OF_CHARACTER);
+		if (next.contains(Status.OPEN_TO_INTERACTIONS)) next.remove(Status.CLOSED_TO_INTERACTIONS);
+		put(player, next);
+	}
+
 	public static void clear(UUID player) {
 		put(player, EnumSet.noneOf(Status.class));
 	}

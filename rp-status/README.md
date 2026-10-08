@@ -16,7 +16,7 @@ Every status can be on or off. Statuses are saved, so they stay after relogging 
 
 ## Install
 
-1. Put `rp-status-1.1.0.jar` in your server's `mods` folder, next to Fabric API and TAB.
+1. Put `rp-status-1.2.0.jar` in your server's `mods` folder, next to Fabric API and TAB.
    (Placeholder API is bundled inside the jar, and the screen uses Minecraft's built-in dialog window, so there's nothing else to install on the server or for players.)
 2. Start the server once.
 3. Make sure `tablist-name-formatting` is `enabled: true` in `config/tab/config.yml` (it is by default).
@@ -37,6 +37,7 @@ Every status can be on or off. Statuses are saved, so they stay after relogging 
 
 - `/status` opens the status screen (anyone can use it)
 - `/status clear` turns all of your statuses off
+- `/status set ...` is what the screen's Save button runs (you don't need to type it)
 
 ## Placeholders
 
@@ -66,6 +67,6 @@ Edit `config/rpstatus/config.json` and restart the server:
 2. Unzip this folder somewhere, open it in File Explorer, click the address bar, type `cmd` and press Enter.
 3. Run: `gradlew.bat build`
    The first build downloads Minecraft and Fabric, so it takes a few minutes.
-4. The mod is `build\libs\rp-status-1.1.0.jar`. (Ignore any `-sources.jar` if one appears.)
+4. The mod is `build\libs\rp-status-1.2.0.jar`. (Ignore any `-sources.jar` if one appears.)
 
 On Mac/Linux it's `./gradlew build`.
