@@ -1,5 +1,6 @@
 package rpstatus;
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import eu.pb4.placeholders.api.PlaceholderResult;
 import eu.pb4.placeholders.api.Placeholders;
 import net.fabricmc.api.ModInitializer;
@@ -28,31 +29,53 @@ public class RpStatusMod implements ModInitializer {
 		registerPlaceholders();
 
 		CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, selection) -> {
+			// /status                -> open the status screen
+			// /status clear          -> turn everything off (from chat)
+			// /status toggle <id>    -> used by the screen's buttons
+			LiteralArgumentBuilder<CommandSourceStack> toggle = Commands.literal("toggle");
+			for (Status status : Status.values()) {
+				toggle.then(Commands.literal(status.id).executes(ctx -> {
+					ServerPlayer player = requirePlayer(ctx.getSource());
+					if (player == null) return 0;
+					StatusStore.toggle(player.getUUID(), status);
+					StatusDialog.show(player);
+					return 1;
+				}));
+			}
+			toggle.then(Commands.literal("clear").executes(ctx -> {
+				ServerPlayer player = requirePlayer(ctx.getSource());
+				if (player == null) return 0;
+				StatusStore.clear(player.getUUID());
+				StatusDialog.show(player);
+				return 1;
+			}));
+
 			dispatcher.register(Commands.literal("status")
-					.executes(ctx -> openMenu(ctx.getSource()))
+					.executes(ctx -> {
+						ServerPlayer player = requirePlayer(ctx.getSource());
+						if (player == null) return 0;
+						StatusDialog.show(player);
+						return 1;
+					})
 					.then(Commands.literal("clear").executes(ctx -> {
-						ServerPlayer player = ctx.getSource().getPlayer();
-						if (player == null) {
-							ctx.getSource().sendFailure(Component.literal("Only players can use this."));
-							return 0;
-						}
+						ServerPlayer player = requirePlayer(ctx.getSource());
+						if (player == null) return 0;
 						StatusStore.clear(player.getUUID());
 						ctx.getSource().sendSuccess(() -> Component.literal("Your statuses have been cleared."), false);
 						return 1;
-					})));
+					}))
+					.then(toggle));
 		});
 
 		LOGGER.info("[RP Status] Loaded. Add %rpstatus:squares% to your TAB tablist prefix to show statuses.");
 	}
 
-	private static int openMenu(CommandSourceStack source) {
+	private static ServerPlayer requirePlayer(CommandSourceStack source) {
 		ServerPlayer player = source.getPlayer();
 		if (player == null) {
 			source.sendFailure(Component.literal("Only players can use this."));
-			return 0;
 		}
-		new StatusMenu(player).open();
-		return 1;
+		return player;
 	}
 
 	/**

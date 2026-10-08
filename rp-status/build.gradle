@@ -7,7 +7,7 @@ base {
 }
 
 repositories {
-	// sgui (chest menus) and Placeholder API (what TAB reads on Fabric)
+	// Placeholder API (what TAB reads on Fabric)
 	maven { url = 'https://maven.nucleoid.xyz/' }
 }
 
@@ -17,7 +17,6 @@ dependencies {
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
 	// Bundled into the jar so server owners only need to drop in one file
-	implementation include("eu.pb4:sgui:${project.sgui_version}")
 	implementation include("eu.pb4:placeholder-api:${project.placeholder_api_version}")
 }
 
